@@ -1,0 +1,195 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Oswald:wght@200..700&display=swap");
+
+*,
+*::after,
+*:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --btn-primary-background: var(--blue-500);
+  --color-attribute: hsl(228, 45%, 44%);
+  --neutral-950: #0e121b;
+  --neutral-900: #191b25;
+  --neutral-800: #232530;
+  --neutral-700: #2b303b;
+  --neutral-600: #525866;
+  --neutral-500: #717784;
+  --neutral-400: #232530;
+  --neutral-300: #cacfd8;
+  --neutral-200: #e0e4ea;
+  --neutral-100: #f3f5f8;
+  --neutral-50: #f5f7fa;
+  --blue-700: #2547d0;
+  --blue-500: #335cff;
+  --blue-50: #ebf1ff;
+  --green-500: #21c16b;
+  --green-100: @191B25;
+  --red-500: #fb3748;
+  --red-100: #ffd5d8;
+  --spacing-0: 0;
+  --spacing-025: 2px;
+  --spacing-050: 4px;
+  --spacing-075: 6px;
+  --spacing-100: 8px;
+  --spacing-150: 12px;
+  --spacing-200: 16px;
+  --spacing-250: 20px;
+  --spacing-300: 24px;
+  --spacing-400: 32px;
+  --spacing-500: 40px;
+  --spacing-600: 48px;
+  --spacing-800: 64px;
+  --spacing-1000: 80px;
+  --radius-0: 0;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-full: 999px;
+}
+button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--neutral-200);
+}
+a {
+  text-decoration: none;
+  color: var(--neutral-200);
+}
+ul {
+  list-style: none;
+}
+body {
+  background-color: var(--neutral-950);
+  color: var(--neutral-200);
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Oswald", sans-serif;
+}
+
+main {
+  margin: auto;
+  display: grid;
+  grid-template-columns: 0.3fr auto 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  padding-top: 1rem;
+}
+
+#root > main:nth-child(1) > nav:nth-child(1) {
+  grid-column: 2/-1;
+  grid-row: 1/2;
+  height: fit-content;
+}
+
+main > aside:nth-child(2) {
+  grid-row: 1/-1;
+  grid-column: 1/2;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+main > aside {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  padding-right: 1rem;
+  padding-left: 0.75rem;
+  border-right: 1px solid var(--neutral-700);
+  margin-right: 1.5rem;
+}
+
+.asideHeader {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--neutral-700);
+  padding-bottom: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.asideHeader > button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itsLife {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 5px;
+}
+.itsLife > span {
+  font-size: 15px;
+  font-weight: 500;
+}
+.Greyone {
+  text-transform: capitalize;
+  color: var(--neutral-500);
+  font-size: 13px;
+}
+.singleTag {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 15px;
+}
+.singleTag:hover {
+  background-color: rgba(128, 128, 128, 0.329);
+  border-radius: 5px;
+  padding: 8px;
+}
+.manyTags {
+  display: flex;
+  flex-direction: column;
+  gap: 5px 0;
+}
+.sectionTh {
+  display: flex;
+  flex-direction: column;
+  gap: 20px 0;
+}
+.btnLight {
+  border-radius: 5px;
+  padding: 8px;
+}
+.btnLight:hover {
+  background-color: rgba(128, 128, 128, 0.329);
+}
+
+.btnHovered {
+  color: white;
+}
+.btnHovered .hoverSVGe path {
+  stroke: var(--blue-700);
+}
+nav h3 {
+  font-size: 25px;
+  font-weight: 700;
+}
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
