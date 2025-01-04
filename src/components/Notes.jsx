@@ -1,10 +1,18 @@
 import React from "react";
 
 function Notes({ data }) {
+  const formatDate = (date) => {
+    const fDate = new Date(date);
+    return new Intl.DateTimeFormat("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(fDate);
+  };
   return (
-    <section>
-      <button>+ create new note</button>
-      <article>
+    <section className="sectionNotee">
+      <button className="createNew">+ create new note</button>
+      <article className="ticles">
         <ul>
           {data.map((note) => {
             const { title, tags, content, lastEdited, isArchived } = note;
@@ -16,7 +24,7 @@ function Notes({ data }) {
                     return <span key={index}>{tea}</span>;
                   })}
                 </div>
-                <p className="lastEditied">{lastEdited}</p>
+                <p className="lastEditied">{formatDate(lastEdited)}</p>
               </li>
             );
           })}

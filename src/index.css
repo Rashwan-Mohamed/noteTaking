@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Oswald:wght@200..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 *,
 *::after,
@@ -6,6 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Inter", serif;
 }
 :root {
   --color-white: #fff;
@@ -67,14 +68,20 @@ a {
 ul {
   list-style: none;
 }
+input {
+  border: none;
+  appearance: none;
+  outline: none;
+}
 body {
   background-color: var(--neutral-950);
   color: var(--neutral-200);
-  font-family: sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Oswald", sans-serif;
+  font-family: "Inter", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 main {
@@ -83,7 +90,6 @@ main {
   grid-template-columns: 0.3fr auto 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
-  padding-top: 1rem;
 }
 
 #root > main:nth-child(1) > nav:nth-child(1) {
@@ -98,10 +104,11 @@ main > aside:nth-child(2) {
 }
 
 #root {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+  width: 100%;
 }
 
 main > aside {
@@ -111,7 +118,6 @@ main > aside {
   padding-right: 1rem;
   padding-left: 0.75rem;
   border-right: 1px solid var(--neutral-700);
-  margin-right: 1.5rem;
 }
 
 .asideHeader {
@@ -192,4 +198,231 @@ nav {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--neutral-700);
+}
+.createNew {
+  background-color: var(--blue-500);
+  border-radius: 5px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.sectionNotee {
+  display: flex;
+  flex-direction: column;
+  margin-right: 2rem;
+}
+
+.createNew {
+  margin-bottom: 1.5rem;
+}
+
+.ticles > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0;
+}
+
+.clickNote {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 5px;
+}
+.clickNote:hover {
+  background-color: var(--neutral-700);
+}
+.clickNote > h4 {
+  font-size: 17px;
+}
+
+.clickNote > div {
+  display: flex;
+  gap: 0 5px;
+}
+
+.clickNote > div > span {
+  background-color: var(--neutral-600);
+  font-size: 13px;
+  border-radius: 2px;
+  padding: 1px 4px;
+}
+
+.clickNote > p {
+  font-size: 13px;
+  color: var(--neutral-500);
+}
+.sectionNotee {
+  margin-left: 1.5rem;
+}
+nav {
+  padding-left: 1.5rem;
+}
+main > aside {
+  padding-top: 1rem;
+}
+
+nav {
+  padding-right: 2rem;
+  padding-top: 15px;
+  padding-bottom: 1rem;
+}
+
+.rightNav {
+  display: flex;
+  flex-direction: row;
+  gap: 0 10px;
+}
+
+.rightNav {
+  justify-content: center;
+  align-items: center;
+}
+
+.searck {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searck > input {
+  outline: none;
+  background-color: transparent;
+  border: none;
+  border: 1px solid var(--neutral-500);
+  border-radius: 5px;
+  padding: 12px 1rem 12px 35px;
+  color: white;
+  transition: all 0.3s ease-in-out;
+  width: 300px;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="%23717784" fill-rule="evenodd" d="M11.248 3.5a7.289 7.289 0 1 0 0 14.577 7.289 7.289 0 0 0 0-14.577ZM2.46 10.79a8.789 8.789 0 1 1 17.577 0 8.789 8.789 0 0 1-17.577 0Z" clip-rule="evenodd"/><path fill="%23717784" fill-rule="evenodd" d="m16.736 15.648 5.616 5.6-1.06 1.063-5.615-5.601 1.06-1.062Z" clip-rule="evenodd"/></svg>');
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+.searck > input:focus {
+  border: 1px solid var(--neutral-300);
+}
+.searck > input::placeholder {
+  text-transform: capitalize;
+}
+
+.mino {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 50px 150px auto 50px;
+  max-height: 100vh;
+}
+
+.noteAside {
+  grid-row: 1/-1;
+  grid-column: 2;
+}
+
+.ticles > ul {
+  overflow: scroll;
+}
+
+body {
+  overflow: hidden;
+}
+
+.sectionNotee {
+  overflow: scroll;
+}
+
+.mino {
+  grid-template-rows: min-content auto min-content;
+}
+
+.mino > footer:nth-child(4) {
+  padding: 1rem;
+}
+
+.noteInfo {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px 0;
+  border-bottom: 1px solid var(--neutral-400);
+}
+
+.mainContent {
+  padding: 1rem;
+}
+
+div.oneEd {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 200px 150px;
+}
+
+div.oneEd * {
+  place-self: flex-start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ponEn {
+  gap: 10px;
+}
+.mainContent {
+  white-space: pre-line;
+  border-bottom: 1px solid var(--neutral-400);
+}
+.noteAside {
+  display: flex;
+  flex-direction: column;
+}
+
+.fotbtnsv,
+.ftbtn {
+  padding: 8px;
+  background-color: var(--blue-500);
+  border-radius: var(--radius-4);
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s ease-in-out;
+}
+.fotbtncn {
+  background-color: var(--neutral-800);
+  color: var(--neutral-500);
+}
+
+.fotbtnsv:hover {
+  background-color: var(--blue-700);
+}
+.fotbtncn:hover {
+  background-color: var(--neutral-700);
+  color: var(--neutral-300);
+}
+.mino > footer:nth-child(4) {
+  display: flex;
+  flex-direction: row;
+  gap: 0 15px;
+}
+
+.noteAside {
+  padding: 0 1rem;
+  gap: 10px 0;
+  width: 300px;
+  border-left: 1px solid var(--neutral-400) ;
+}
+
+.asideBtns {
+  border: 1px solid var(--neutral-500);
+  border-radius: var(--radius-8);
+  padding: 8px 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0 10px;
+  transition: all 0.2s ease-in-out;
+}
+.asideBtns:hover {
+  border: 1px solid var(--neutral-600);
 }
