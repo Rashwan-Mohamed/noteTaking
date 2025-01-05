@@ -10,7 +10,7 @@ function ViewNote({ chosen, handleEditNote, note }) {
       </section>
     );
   }
-  const { title, tags, content, lastEdited, isArchived } = chosen;
+  const { title, tags, content, lastEdited, isArchived, naew } = chosen;
   const [noteContent, setNoteContent] = useState({
     iContent: content,
     ititle: title,
@@ -31,6 +31,11 @@ function ViewNote({ chosen, handleEditNote, note }) {
 
   // reload the noteContent hook when note is updated
   useEffect(() => {
+    if (naew) {
+      setEdit(() => true);
+    } else {
+      setEdit(() => false);
+    }
     setNoteContent({ iContent: content, ititle: title, itags: tags });
     setNewTag("");
   }, [chosen]);
@@ -85,17 +90,19 @@ function ViewNote({ chosen, handleEditNote, note }) {
         <div className="wrapperLay">
           {" "}
           <section className="finalWarning">
-            <p>are you sure you want to {sure.operation} this note ?</p>
+            <p>
+              are you sure you want to{" "}
+              {sure.operation === "edit" ? "save" : sure.operation} this note ?
+            </p>
             <div className="sureBtns">
               <button
                 className="ftbtn suDo"
                 onClick={() => {
-                  // make sure that title is unique
                   handleEditNote(sure.title, sure.operation, sure.payload);
                   setSure(null);
                 }}
               >
-                {sure.operation}
+                {sure.operation === "edit" ? "save" : sure.operation}
               </button>
               <button
                 className="ftbtn fotbtncn"
@@ -214,6 +221,7 @@ function ViewNote({ chosen, handleEditNote, note }) {
               return { ...old, iContent: e.target.value };
             });
           }}
+          disabled={!edit}
           name=""
           id="textAreas"
         >
@@ -223,7 +231,11 @@ function ViewNote({ chosen, handleEditNote, note }) {
       <aside className="noteAside">
         <button
           onClick={() => {
-            setSure({ title: title, operation: "archieve", content: "" });
+            setSure({
+              title: title,
+              operation: isArchived ? "Un-Archive" : "archieve",
+              content: "",
+            });
           }}
           className="asideBtns"
         >
@@ -249,7 +261,7 @@ function ViewNote({ chosen, handleEditNote, note }) {
               d="m15 14-3.002 3L9 14M11.998 17v-7M20.934 7H3.059"
             />
           </svg>
-          <span> Archive Note</span>
+          <span> {isArchived ? "Un-Archive" : "Archive"} Note</span>
         </button>
         <button
           onClick={() => {
@@ -275,25 +287,40 @@ function ViewNote({ chosen, handleEditNote, note }) {
           <span> Delete Note</span>
         </button>
       </aside>
+
       <footer>
-        <button
-          onClick={() => {
-            if (newTag) {
-              handleNewTag();
-            }
-            if (uniqueTitle()) {
-              setSure({
-                title: title,
-                operation: "edit",
-                payload: noteContent,
-              });
-            }
-          }}
-          className="ftbtn fotbtnsv"
-        >
-          Save Note
-        </button>
-        <button className="ftbtn fotbtncn">Cancel</button>
+        {edit ? (
+          <>
+            {" "}
+            <button
+              onClick={() => {
+                setEdit(false);
+                if (newTag) {
+                  handleNewTag();
+                }
+                if (uniqueTitle()) {
+                  handleEditNote(title, "edit", noteContent);
+                }
+              }}
+              className="ftbtn fotbtnsv"
+            >
+              Save Note
+            </button>
+            <button
+              onClick={() => {
+                setEdit(false);
+                setNoteContent({
+                  iContent: content,
+                  ititle: title,
+                  itags: tags,
+                });
+              }}
+              className="ftbtn fotbtncn"
+            >
+              Cancel
+            </button>
+          </>
+        ) : null}
       </footer>
     </section>
   );

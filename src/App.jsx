@@ -38,13 +38,14 @@ function App() {
           note.content = payload.iContent;
           note.title = payload.ititle;
           note.tags = payload.itags;
+          note.naew = false;
           note.lastEdited = timeNow();
           return note;
         }
       });
       rashwan.notes = nsa;
       setActive("edited");
-    } else if (operation === "archieve") {
+    } else if (operation === "archieve" || operation === "Un-Archive") {
       let eas = rashwan.notes.filter((note) => {
         if (note.title !== title) return note;
         else {
@@ -54,7 +55,7 @@ function App() {
       });
       rashwan.notes = eas;
 
-      setActive("archieved");
+      setActive(`${operation}d`);
     } else if (operation === "delete") {
       let rea = rashwan.notes.filter((note, id) => {
         if (note.title !== title) return note;
@@ -92,7 +93,7 @@ function App() {
       content: "",
       lastEdited: timeNow(),
       isArchived: false,
-      new: true,
+      naew: true,
     });
     reloadNotes();
   };

@@ -600,3 +600,41 @@ div.oneEd {
   text-transform: capitalize;
   font-size: 13px;
 }
+
+main {
+  grid-template-columns: 0.3fr min-content 1fr;
+}
+
+.sectionNotee {
+  padding-right: 10px;
+  width: 300px;
+}
+main > aside {
+  overflow-y: scroll;
+}
+
+.clickNote > div {
+  gap: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.clickNote > div > span {
+  width: fit-content;
+}
+.createNew {
+  transition: all 0.3s ease-in-out;
+}
+
+.createNew:hover {
+  background-color: var(--blue-700);
+}
+::-webkit-scrollbar {
+  height:1px;
+  width: 1px;
+  background: #000;
+  background-color: var(--neutral-900);
+  height: 0;
+  visibility: hidden;
+
+}
