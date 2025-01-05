@@ -1,10 +1,7 @@
 import React, { useRef, useState } from "react";
 import Tags from "./Tags";
 
-function Aside({ note, state, handleNoteState }) {
-  const [oneHover, setOnehover] = useState(true);
-  const [twoHover, setTwohover] = useState(false);
-
+function Aside({ note, isArchived, handleNoteState,handleTagSelect }) {
   return (
     <aside>
       <div className="icon">
@@ -42,7 +39,7 @@ function Aside({ note, state, handleNoteState }) {
       <div className="asideHeader">
         <button
           onClick={() => handleNoteState(true)}
-          className={state ? "btnLight btnHovered" : "btnLight"}
+          className={!isArchived ? "btnLight btnHovered" : "btnLight"}
         >
           <span className="itsLife">
             <svg
@@ -91,7 +88,7 @@ function Aside({ note, state, handleNoteState }) {
         </button>
         <button
           onClick={() => handleNoteState(false)}
-          className={!state ? "btnLight btnHovered" : "btnLight"}
+          className={isArchived ? "btnLight btnHovered" : "btnLight"}
         >
           <span className="itsLife">
             <svg
@@ -135,7 +132,7 @@ function Aside({ note, state, handleNoteState }) {
           </svg>
         </button>
       </div>
-      <Tags data={note}></Tags>
+      <Tags handleTagSelect={handleTagSelect} data={note}></Tags>
     </aside>
   );
 }

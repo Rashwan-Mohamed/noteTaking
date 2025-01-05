@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-function ViewNote({ chosen }) {
+function ViewNote({ chosen, handleEditNote }) {
+  if (!chosen) {
+    return (
+      <section className="mino">
+        <article style={{ whiteSpace: "pre-line" }} className="mainContent">
+          NO NOTES MATCH THIS CRITERIA
+        </article>
+      </section>
+    );
+  }
   const { title, tags, content, lastEdited, isArchived } = chosen;
+  const [noteContent, setNoteContent] = useState({
+    iContent: content,
+    ititle: title,
+    itags: tags,
+  });
+  const [newTag, setNewTag] = useState("");
+  const [sure, setSure] = useState(false);
+  const [edit, setEdit] = useState(false);
   const formatDate = (date) => {
     const fDate = new Date(date);
     return new Intl.DateTimeFormat("en-US", {
@@ -10,11 +27,61 @@ function ViewNote({ chosen }) {
       year: "numeric",
     }).format(fDate);
   };
-  console.log(content);
+
+  // reload the noteContent hook when note is updated
+  useEffect(() => {
+    setNoteContent({ iContent: content, ititle: title, itags: tags });
+    setNewTag("");
+  }, [chosen]);
+
+  const handleNewTag = () => {
+    setNoteContent((old) => {
+      setNewTag('')
+      return { ...old, itags: [...old.itags, newTag] };
+    });
+  };
   return (
     <section className="mino">
+      {sure && (
+        <div className="wrapperLay">
+          {" "}
+          <section className="finalWarning">
+            <p>are you sure you want to {sure.operation} this note ?</p>
+            <div className="sureBtns">
+              <button
+                className="ftbtn suDo"
+                onClick={() => {
+                  handleEditNote(sure.title, sure.operation, sure.payload);
+                  setSure(null);
+                }}
+              >
+                {sure.operation}
+              </button>
+              <button
+                className="ftbtn fotbtncn"
+                onClick={() => {
+                  setSure(null);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
       <div className="noteInfo">
-        <h2>{title}</h2>
+        <input
+          type="text"
+          name=""
+          id="titleInput"
+          value={noteContent.ititle}
+          onChange={(e) =>
+            setNoteContent((old) => {
+              return { ...old, ititle: e.target.value };
+            })
+          }
+          disabled={!edit}
+        />
         <div className="oneEd">
           <p className="ponEn">
             <svg
@@ -43,7 +110,29 @@ function ViewNote({ chosen }) {
             </svg>
             <span>Tags</span>
           </p>
-          <p>{tags.join(",")}</p>
+
+          {!edit ? (
+            <p>{noteContent.itags.join(", ")}</p>
+          ) : (
+            <>
+              <div className="tagsWrapper">
+                {noteContent.itags.map((t) => {
+                  return (
+                    <div className="tGAS">
+                      {t}
+                      <span>x</span>
+                    </div>
+                  );
+                })}
+                <input
+                  type="text"
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  className="addTag"
+                />
+              </div>
+            </>
+          )}
         </div>
         <div className="oneEd">
           <p className="ponEn">
@@ -51,14 +140,40 @@ function ViewNote({ chosen }) {
             <span>Last Edited</span>
           </p>
           <p>{formatDate(lastEdited)}</p>
+          <button
+            onClick={() => {
+              if (newTag) {
+                handleNewTag();
+              }
+              setEdit(!edit);
+            }}
+            className="editNote"
+          >
+            {edit ? "Stop Editing" : "Edit"}
+          </button>
         </div>
       </div>
-      <article
-        style={{ whiteSpace: "pre-line" }}
-        className="mainContent"
-      >{`${content}`}</article>
+      <article style={{ whiteSpace: "pre-line" }} className="mainContent">
+        <textarea
+          value={noteContent.iContent}
+          onChange={(e) => {
+            setNoteContent((old) => {
+              return { ...old, iContent: e.target.value };
+            });
+          }}
+          name=""
+          id="textAreas"
+        >
+          {`${noteContent.iContent}`}
+        </textarea>
+      </article>
       <aside className="noteAside">
-        <button className="asideBtns" >
+        <button
+          onClick={() => {
+            setSure({ title: title, operation: "archieve", content: "" });
+          }}
+          className="asideBtns"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -68,22 +183,27 @@ function ViewNote({ chosen }) {
           >
             <path
               stroke="#e0e4ea"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
               d="M21 7.782v8.435C21 19.165 18.919 21 15.974 21H8.026C5.081 21 3 19.165 3 16.216V7.782C3 4.834 5.081 3 8.026 3h7.948C18.919 3 21 4.843 21 7.782Z"
             />
             <path
               stroke="#e0e4ea"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
               d="m15 14-3.002 3L9 14M11.998 17v-7M20.934 7H3.059"
             />
           </svg>
           <span> Archive Note</span>
         </button>
-        <button className="asideBtns">
+        <button
+          onClick={() => {
+            setSure({ title: title, operation: "delete", content: "" });
+          }}
+          className="asideBtns"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -93,7 +213,7 @@ function ViewNote({ chosen }) {
           >
             <path
               stroke="#e0e4ea"
-              stroke-Linecap="round"
+              strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="1.5"
               d="m14.852 3.879.818 1.785h2.64c.811 0 1.47.658 1.47 1.47V8.22c0 .555-.45 1.005-1.006 1.005H5.005C4.45 9.226 4 8.776 4 8.221V7.133c0-.811.658-1.47 1.47-1.47h2.639l.818-1.784c.246-.536.78-.879 1.37-.879h3.185c.59 0 1.125.343 1.37.879ZM18.24 9.3v8.686c0 1.665-1.333 3.014-2.977 3.014H8.517c-1.644 0-2.977-1.349-2.977-3.014V9.301M10.2 12.816v4.509m3.38-4.509v4.509"
@@ -103,7 +223,21 @@ function ViewNote({ chosen }) {
         </button>
       </aside>
       <footer>
-        <button className="ftbtn fotbtnsv">Save Note</button>
+        <button
+          onClick={() => {
+            if (newTag) {
+              handleNewTag();
+            }
+            setSure({
+              title: title,
+              operation: "edit",
+              payload: noteContent,
+            });
+          }}
+          className="ftbtn fotbtnsv"
+        >
+          Save Note
+        </button>
         <button className="ftbtn fotbtncn">Cancel</button>
       </footer>
     </section>

@@ -1,52 +1,121 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import data from "./data.json";
 import Notes from "./components/Notes";
-import Tags from "./components/Tags";
 import ViewNote from "./components/ViewNote";
 import Aside from "./components/Aside";
-function App() {
-  const [notes, setNotes] = useState(true);
-  const [note, setNoto] = useState(data.notes);
-  const [chosen, setChosen] = useState(0);
-  const handleNoteState = (to) => {
-    setNotes(to);
-  };
-  let content = (
-    <>
-      {" "}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="#0E121B"
-          fillRule="evenodd"
-          d="M11.248 3.5a7.289 7.289 0 1 0 0 14.577 7.289 7.289 0 0 0 0-14.577ZM2.46 10.79a8.789 8.789 0 1 1 17.577 0 8.789 8.789 0 0 1-17.577 0Z"
-          clipRule="evenodd"
-        />
-        <path
-          fill="#0E121B"
-          fillRule="evenodd"
-          d="m16.736 15.648 5.616 5.6-1.06 1.063-5.615-5.601 1.06-1.062Z"
-          clipRule="evenodd"
-        />
-      </svg>
-      <p>search by title, content or tags...</p>
-    </>
-  );
 
-  function handleEditNote(index, note) {}
+const items = data;
+function App() {
+  const [isArchived, setIsArchived] = useState(false);
+  const [note, setNoto] = useState(items.notes);
+  const [active, setActive] = useState(false);
+  const [chosen, setChosen] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [tags, setTags] = useState("");
+
+  const handleNoteState = (to) => {
+    setIsArchived(!to);
+  };
+  function handleEditNote(title, operation, payload) {
+    if (operation === "edit") {
+      items.notes = items.notes.filter((note, id) => {
+        if (note.title !== title) return note;
+        else {
+          note.content = payload.icontent;
+          note.title = payload.ititle;
+          note.tags = payload.itags;
+          let nd = new Date();
+          note.lastEdited = nd.toISOString();
+          return note;
+        }
+      });
+      setActive("edited");
+    } else if (operation === "archieve") {
+      items.notes = items.notes.filter((note, id) => {
+        if (note.title !== title) return note;
+        else {
+          note.isArchived = !note.isArchived;
+          return note;
+        }
+      });
+      setActive("archieved");
+    } else if (operation === "delete") {
+      items.notes = items.notes.filter((note, id) => {
+        if (note.title !== title) return note;
+      });
+      setActive("deleted");
+    }
+    reloadNotes();
+  }
+  function hnadleSelectNote(id) {
+    setChosen(id);
+  }
+  const handleTagSelect = (tag) => {
+    setTags(tag);
+    setChosen(0);
+  };
+  const reloadNotes = () => {
+    let newNotes = data.notes.filter((note) => {
+      if (note.isArchived !== isArchived) {
+        return null;
+      }
+      if (tags && !note.tags.includes(tags)) {
+        return null;
+      }
+      return note;
+    });
+    setNoto(newNotes);
+  };
+  useEffect(() => {
+    if (searchQuery.length) {
+      let searchResult = [];
+      for (let i = 0; i < items.notes.length; i++) {
+        const { title, tags: tea, content } = items.notes[i];
+        if (title.match(searchQuery)) {
+          searchResult.push(items.notes[i]);
+          continue;
+        }
+        for (let i = 0; i < tea.length; i++) {
+          if (tea[i].match(searchQuery)) {
+            searchResult.push(items.notes[i]);
+            continue;
+          }
+        }
+        if (searchResult.length) {
+          continue;
+        }
+        if (content.match(searchQuery)) {
+          searchResult.push(items.notes[i]);
+        }
+      }
+      setNoto(searchResult);
+    } else {
+      reloadNotes();
+    }
+    setChosen(0);
+  }, [tags, isArchived, searchQuery, items]);
+  useEffect(() => {
+    setTimeout(() => {
+      setActive(false);
+    }, 2000);
+    return () =>
+      clearTimeout(() => {
+        setActive(false);
+      }, 2000);
+  }, [active]);
   return (
     <>
+      {active && <div className="tmpMessage">note {active} successfully!</div>}
       <main>
         <nav>
-          <h3>{notes ? "All" : "Archived"} Notes</h3>
+          <h3>{!isArchived ? "All" : "Archived"} Notes</h3>
           <div className="rightNav">
             <div className="searck">
               <input
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                }}
                 type="text"
                 placeholder={"Search by title, content or tags..."}
               />
@@ -70,12 +139,20 @@ function App() {
           </div>
         </nav>
         <Aside
-          state={notes}
+          handleTagSelect={handleTagSelect}
+          isArchived={isArchived}
           handleNoteState={handleNoteState}
           note={note}
         ></Aside>
-        <Notes data={note}></Notes>
-        <ViewNote chosen={note[chosen]}></ViewNote>
+        <Notes
+          hnadleSelectNote={hnadleSelectNote}
+          data={note}
+          isArchived={isArchived}
+        ></Notes>
+        <ViewNote
+          handleEditNote={handleEditNote}
+          chosen={note[chosen]}
+        ></ViewNote>
       </main>
     </>
   );
