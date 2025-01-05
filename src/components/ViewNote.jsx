@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function ViewNote({ chosen, handleEditNote }) {
+function ViewNote({ chosen, handleEditNote, note }) {
   if (!chosen) {
     return (
       <section className="mino">
@@ -19,6 +19,7 @@ function ViewNote({ chosen, handleEditNote }) {
   const [newTag, setNewTag] = useState("");
   const [sure, setSure] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [uniqueName, setUniqueName] = useState(false);
   const formatDate = (date) => {
     const fDate = new Date(date);
     return new Intl.DateTimeFormat("en-US", {
@@ -35,10 +36,48 @@ function ViewNote({ chosen, handleEditNote }) {
   }, [chosen]);
 
   const handleNewTag = () => {
-    setNoteContent((old) => {
-      setNewTag('')
-      return { ...old, itags: [...old.itags, newTag] };
+    // make sure that tag doesn't exist already
+    let nop = false;
+    noteContent.itags.forEach((tq) => {
+      if (tq === newTag) {
+        nop = true;
+      }
     });
+    if (!nop) {
+      setNoteContent((old) => {
+        return { ...old, itags: [...old.itags, newTag] };
+      });
+    }
+    setNewTag("");
+  };
+  const handleRemoveTag = (t) => {
+    let tes = noteContent.itags.filter((no) => no !== t);
+    setNoteContent((old) => {
+      return { ...old, itags: tes };
+    });
+  };
+  const handleEnterPress = (event) => {
+    if (event.key === "Enter") {
+      handleNewTag();
+    }
+  };
+  const uniqueTitle = () => {
+    let un = true;
+    note.forEach((rer) => {
+      if (rer.title === noteContent.ititle && rer !== chosen) {
+        un = false;
+      }
+    });
+    if (!un) {
+      setNoteContent((old) => {
+        return { ...old, ititle: title };
+      });
+      setUniqueName(true);
+      setTimeout(() => {
+        setUniqueName(false);
+      }, 3000);
+    }
+    return un;
   };
   return (
     <section className="mino">
@@ -51,6 +90,7 @@ function ViewNote({ chosen, handleEditNote }) {
               <button
                 className="ftbtn suDo"
                 onClick={() => {
+                  // make sure that title is unique
                   handleEditNote(sure.title, sure.operation, sure.payload);
                   setSure(null);
                 }}
@@ -82,6 +122,9 @@ function ViewNote({ chosen, handleEditNote }) {
           }
           disabled={!edit}
         />
+        {uniqueName && (
+          <p className="uniqueTitle">please choose a unique title.</p>
+        )}
         <div className="oneEd">
           <p className="ponEn">
             <svg
@@ -118,7 +161,13 @@ function ViewNote({ chosen, handleEditNote }) {
               <div className="tagsWrapper">
                 {noteContent.itags.map((t) => {
                   return (
-                    <div className="tGAS">
+                    <div
+                      key={t}
+                      onClick={() => {
+                        handleRemoveTag(t);
+                      }}
+                      className="tGAS"
+                    >
                       {t}
                       <span>x</span>
                     </div>
@@ -129,12 +178,13 @@ function ViewNote({ chosen, handleEditNote }) {
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
                   className="addTag"
+                  onKeyDown={handleEnterPress}
                 />
               </div>
             </>
           )}
         </div>
-        <div className="oneEd">
+        <div className="oneEd lastoneEd">
           <p className="ponEn">
             <img src="src\assets\images\icon-clock.svg" alt="" />
             <span>Last Edited</span>
@@ -142,6 +192,9 @@ function ViewNote({ chosen, handleEditNote }) {
           <p>{formatDate(lastEdited)}</p>
           <button
             onClick={() => {
+              if (edit) {
+                uniqueTitle();
+              }
               if (newTag) {
                 handleNewTag();
               }
@@ -228,11 +281,13 @@ function ViewNote({ chosen, handleEditNote }) {
             if (newTag) {
               handleNewTag();
             }
-            setSure({
-              title: title,
-              operation: "edit",
-              payload: noteContent,
-            });
+            if (uniqueTitle()) {
+              setSure({
+                title: title,
+                operation: "edit",
+                payload: noteContent,
+              });
+            }
           }}
           className="ftbtn fotbtnsv"
         >

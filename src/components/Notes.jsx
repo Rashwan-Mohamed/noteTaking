@@ -1,7 +1,6 @@
 import React from "react";
 
-function Notes({ data, hnadleSelectNote }) {
-
+function Notes({ data, hnadleSelectNote, handleCreatNewNote }) {
   const formatDate = (date) => {
     const fDate = new Date(date);
     return new Intl.DateTimeFormat("en-US", {
@@ -12,7 +11,9 @@ function Notes({ data, hnadleSelectNote }) {
   };
   return (
     <section className="sectionNotee">
-      <button className="createNew">+ create new note</button>
+      <button onClick={() => handleCreatNewNote()} className="createNew">
+        + create new note
+      </button>
       <article className="ticles">
         <ul>
           {data.map((note, index) => {

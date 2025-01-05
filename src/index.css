@@ -589,3 +589,14 @@ div.tGAS {
   max-width: fit-content;
   width: 50px;
 }
+div.oneEd {
+  grid-template-columns: 200px auto;
+}
+.lastoneEd {
+  grid-template-columns: 200px auto 1fr !important;
+}
+.uniqueTitle {
+  color: var(--red-500);
+  text-transform: capitalize;
+  font-size: 13px;
+}

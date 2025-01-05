@@ -3,48 +3,66 @@ import data from "./data.json";
 import Notes from "./components/Notes";
 import ViewNote from "./components/ViewNote";
 import Aside from "./components/Aside";
+let rashwan = { notes: data.notes, unTitledNoteCouter: 0 };
 
-const items = data;
 function App() {
   const [isArchived, setIsArchived] = useState(false);
-  const [note, setNoto] = useState(items.notes);
+  const [note, setNoto] = useState(rashwan.notes);
   const [active, setActive] = useState(false);
   const [chosen, setChosen] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [tags, setTags] = useState("");
-
+  useEffect(() => {
+    const savedData = localStorage.getItem("myArray");
+    if (savedData) {
+      rashwan = JSON.parse(savedData);
+    } else {
+      localStorage.setItem("myArray", JSON.stringify(rashwan));
+    }
+  }, []);
+  function timeNow() {
+    let nd = new Date();
+    note.lastEdited = nd.toISOString();
+    return nd.toISOString();
+  }
   const handleNoteState = (to) => {
     setIsArchived(!to);
   };
+
   function handleEditNote(title, operation, payload) {
     if (operation === "edit") {
-      items.notes = items.notes.filter((note, id) => {
+      let nsa = rashwan.notes.filter((note) => {
         if (note.title !== title) return note;
         else {
-          note.content = payload.icontent;
+          console.log(payload.iContent);
+          note.content = payload.iContent;
           note.title = payload.ititle;
           note.tags = payload.itags;
-          let nd = new Date();
-          note.lastEdited = nd.toISOString();
+          note.lastEdited = timeNow();
           return note;
         }
       });
+      rashwan.notes = nsa;
       setActive("edited");
     } else if (operation === "archieve") {
-      items.notes = items.notes.filter((note, id) => {
+      let eas = rashwan.notes.filter((note) => {
         if (note.title !== title) return note;
         else {
           note.isArchived = !note.isArchived;
           return note;
         }
       });
+      rashwan.notes = eas;
+
       setActive("archieved");
     } else if (operation === "delete") {
-      items.notes = items.notes.filter((note, id) => {
+      let rea = rashwan.notes.filter((note, id) => {
         if (note.title !== title) return note;
       });
+      rashwan.notes = rea;
       setActive("deleted");
     }
+
     reloadNotes();
   }
   function hnadleSelectNote(id) {
@@ -55,7 +73,7 @@ function App() {
     setChosen(0);
   };
   const reloadNotes = () => {
-    let newNotes = data.notes.filter((note) => {
+    let newNotes = rashwan.notes.filter((note) => {
       if (note.isArchived !== isArchived) {
         return null;
       }
@@ -65,19 +83,32 @@ function App() {
       return note;
     });
     setNoto(newNotes);
+    localStorage.setItem("myArray", JSON.stringify(rashwan));
   };
+  const handleCreatNewNote = () => {
+    rashwan.notes.unshift({
+      title: `untitled note ${++rashwan.unTitledNoteCouter}`,
+      tags: [],
+      content: "",
+      lastEdited: timeNow(),
+      isArchived: false,
+      new: true,
+    });
+    reloadNotes();
+  };
+
   useEffect(() => {
     if (searchQuery.length) {
       let searchResult = [];
-      for (let i = 0; i < items.notes.length; i++) {
-        const { title, tags: tea, content } = items.notes[i];
+      for (let i = 0; i < rashwan.notes.length; i++) {
+        const { title, tags: tea, content } = rashwan.notes[i];
         if (title.match(searchQuery)) {
-          searchResult.push(items.notes[i]);
+          searchResult.push(rashwan.notes[i]);
           continue;
         }
         for (let i = 0; i < tea.length; i++) {
           if (tea[i].match(searchQuery)) {
-            searchResult.push(items.notes[i]);
+            searchResult.push(rashwan.notes[i]);
             continue;
           }
         }
@@ -85,7 +116,7 @@ function App() {
           continue;
         }
         if (content.match(searchQuery)) {
-          searchResult.push(items.notes[i]);
+          searchResult.push(rashwan.notes[i]);
         }
       }
       setNoto(searchResult);
@@ -93,7 +124,7 @@ function App() {
       reloadNotes();
     }
     setChosen(0);
-  }, [tags, isArchived, searchQuery, items]);
+  }, [tags, isArchived, searchQuery]);
   useEffect(() => {
     setTimeout(() => {
       setActive(false);
@@ -103,6 +134,7 @@ function App() {
         setActive(false);
       }, 2000);
   }, [active]);
+
   return (
     <>
       {active && <div className="tmpMessage">note {active} successfully!</div>}
@@ -145,11 +177,13 @@ function App() {
           note={note}
         ></Aside>
         <Notes
+          handleCreatNewNote={handleCreatNewNote}
           hnadleSelectNote={hnadleSelectNote}
           data={note}
           isArchived={isArchived}
         ></Notes>
         <ViewNote
+          note={rashwan.notes}
           handleEditNote={handleEditNote}
           chosen={note[chosen]}
         ></ViewNote>
