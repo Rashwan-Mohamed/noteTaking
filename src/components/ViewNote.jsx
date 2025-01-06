@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import UseWidth from "../UseWidth";
 
 function ViewNote({ chosen, handleEditNote, note }) {
   if (!chosen) {
@@ -20,6 +21,7 @@ function ViewNote({ chosen, handleEditNote, note }) {
   const [sure, setSure] = useState(false);
   const [edit, setEdit] = useState(false);
   const [uniqueName, setUniqueName] = useState(false);
+  const [change, setChange] = useState(false);
   const formatDate = (date) => {
     const fDate = new Date(date);
     return new Intl.DateTimeFormat("en-US", {
@@ -28,15 +30,18 @@ function ViewNote({ chosen, handleEditNote, note }) {
       year: "numeric",
     }).format(fDate);
   };
-
+  const width = UseWidth();
   // reload the noteContent hook when note is updated
   useEffect(() => {
     if (naew) {
+      setChange(() => true);
       setEdit(() => true);
     } else {
       setEdit(() => false);
+      setChange(false);
     }
     setNoteContent({ iContent: content, ititle: title, itags: tags });
+
     setNewTag("");
   }, [chosen]);
 
@@ -84,6 +89,7 @@ function ViewNote({ chosen, handleEditNote, note }) {
     }
     return un;
   };
+
   return (
     <section className="mino">
       {sure && (
@@ -199,6 +205,7 @@ function ViewNote({ chosen, handleEditNote, note }) {
           <p>{formatDate(lastEdited)}</p>
           <button
             onClick={() => {
+              setChange(() => true);
               if (edit) {
                 uniqueTitle();
               }
@@ -223,6 +230,7 @@ function ViewNote({ chosen, handleEditNote, note }) {
           }}
           disabled={!edit}
           name=""
+          placeholder="press edit and start typing..."
           id="textAreas"
         >
           {`${noteContent.iContent}`}
@@ -261,7 +269,11 @@ function ViewNote({ chosen, handleEditNote, note }) {
               d="m15 14-3.002 3L9 14M11.998 17v-7M20.934 7H3.059"
             />
           </svg>
-          <span> {isArchived ? "Un-Archive" : "Archive"} Note</span>
+          {width > 1025 ? (
+            <span> {isArchived ? "Un-Archive" : "Archive"} Note</span>
+          ) : (
+            ""
+          )}
         </button>
         <button
           onClick={() => {
@@ -284,44 +296,44 @@ function ViewNote({ chosen, handleEditNote, note }) {
               d="m14.852 3.879.818 1.785h2.64c.811 0 1.47.658 1.47 1.47V8.22c0 .555-.45 1.005-1.006 1.005H5.005C4.45 9.226 4 8.776 4 8.221V7.133c0-.811.658-1.47 1.47-1.47h2.639l.818-1.784c.246-.536.78-.879 1.37-.879h3.185c.59 0 1.125.343 1.37.879ZM18.24 9.3v8.686c0 1.665-1.333 3.014-2.977 3.014H8.517c-1.644 0-2.977-1.349-2.977-3.014V9.301M10.2 12.816v4.509m3.38-4.509v4.509"
             />
           </svg>
-          <span> Delete Note</span>
+
+          {width > 1025 ? <span> Delete Note</span> : ""}
         </button>
       </aside>
-
-      <footer>
-        {edit ? (
-          <>
-            {" "}
-            <button
-              onClick={() => {
-                setEdit(false);
-                if (newTag) {
-                  handleNewTag();
-                }
-                if (uniqueTitle()) {
-                  handleEditNote(title, "edit", noteContent);
-                }
-              }}
-              className="ftbtn fotbtnsv"
-            >
-              Save Note
-            </button>
-            <button
-              onClick={() => {
-                setEdit(false);
-                setNoteContent({
-                  iContent: content,
-                  ititle: title,
-                  itags: tags,
-                });
-              }}
-              className="ftbtn fotbtncn"
-            >
-              Cancel
-            </button>
-          </>
-        ) : null}
-      </footer>
+      {change && (
+        <footer>
+          {" "}
+          <button
+            onClick={() => {
+              setChange(false);
+              setEdit(false);
+              if (newTag) {
+                handleNewTag();
+              }
+              if (uniqueTitle()) {
+                handleEditNote(title, "edit", noteContent);
+              }
+            }}
+            className="ftbtn fotbtnsv"
+          >
+            Save Note
+          </button>
+          <button
+            onClick={() => {
+              setChange(false);
+              setEdit(false);
+              setNoteContent({
+                iContent: content,
+                ititle: title,
+                itags: tags,
+              });
+            }}
+            className="ftbtn fotbtncn"
+          >
+            Cancel
+          </button>
+        </footer>
+      )}
     </section>
   );
 }

@@ -630,11 +630,207 @@ main > aside {
   background-color: var(--blue-700);
 }
 ::-webkit-scrollbar {
-  height:1px;
+  height: 1px;
   width: 1px;
   background: #000;
   background-color: var(--neutral-900);
   height: 0;
   visibility: hidden;
+}
+.spanner {
+  width: 2rem;
+  height: 2rem;
+  position: fixed;
+  top: 20rem;
+  left: 0;
+  background-color: var(--blue-500);
+  transition: background-color 0.3s ease-in-out;
+  animation: fadeIn 0.3s ease-in;
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.spanner:hover {
+  background-color: var(--blue-700);
+}
+.moveLift {
+  transform: translateX(-100%);
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  /* display: none; */
+  /* overflow: hidden; */
+}
+.hideSideOut {
+  text-align: center;
+  background-color: var(--neutral-800);
+  border-radius: 5px;
+  padding: 3px 5px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 7px;
+}
 
+/*   1450px and bigger    */
+@media screen and (min-width: 1450px) {
+}
+
+/*   1250px-1450px */
+@media screen and (max-width: 1450px) {
+  main {
+    grid-template-columns: 0.3fr 0.4fr 1fr;
+  }
+
+  .sectionNotee {
+    width: fit-content;
+  }
+
+  .mino {
+    grid-template-columns: 1fr 0.3fr;
+  }
+
+  .noteAside {
+    gap: 30px 0;
+    width: fit-content;
+    padding: 0;
+    width: 100%;
+    padding: 0 10px 0 10px;
+  }
+
+  .asideBtns {
+    text-align: center;
+    justify-content: center;
+  }
+  .clickNote > h4 {
+    font-size: 15px;
+  }
+}
+
+/*   1025px-1250px */
+
+@media screen and (max-width: 1250px) {
+  main > aside {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  main {
+    grid-template-columns: 0.3fr 0.3fr 1fr;
+  }
+  .clickNote > h4 {
+    font-size: 14px;
+  }
+  .mino {
+    grid-template-columns: 1fr 0.4fr;
+  }
+
+  #titleInput {
+    font-size: 20px;
+  }
+
+  .itsLife > span {
+    font-size: 13px;
+  }
+
+  .singleTag {
+    font-size: 13px;
+  }
+
+  .clickNote > div > span {
+    font-size: 11px;
+    padding: 1px 2px;
+  }
+
+  .clickNote > p {
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .createNew {
+    padding: 0.6rem 0.6rem;
+    font-size: 13px;
+  }
+
+  .asideBtns {
+    padding: 8px 3px;
+    gap: 0 5px;
+  }
+
+  .sectionNotee {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+/*   768px-1025px */
+@media screen and (max-width: 1025px) {
+  .mino {
+    grid-template-columns: 1fr min-content;
+  }
+  .asideBtns {
+    padding: 3px;
+  }
+  .sectionNotee {
+    padding-right: 5px;
+  }
+  .noteAside {
+    border-left: none;
+  }
+
+  .btnLight {
+    padding: 8px 2px;
+  }
+
+  main {
+    grid-template-columns: min-content 0.3fr 1fr;
+  }
+  .asideHeader > button {
+    justify-content: center;
+  }
+  .asideHeader {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .createNew {
+    font-size: 12px;
+    padding: 10px 2px;
+  }
+  .sectionNotee {
+    margin-left: 2px;
+    margin-right: 3px;
+  }
+
+  .noteInfo {
+    padding: 5px;
+  }
+
+  .mainContent {
+    padding: 5px;
+  }
+
+  .noteAside {
+    padding: 0 10px 0 5px;
+  }
+  #root > main:nth-child(1) > aside:nth-child(2) {
+    grid-row: 2/-1;
+    padding-top: 0;
+  }
+  #root > main:nth-child(1) > nav:nth-child(1) {
+    grid-column: 1/-1;
+  }
+  .asideHeader {
+    margin-top: 0;
+    }
+}
+
+/*   500px-768px */
+
+@media screen and (max-width: 768px) {
+}
+/*   max width 500 */
+@media screen and (max-width: 500px) {
 }
