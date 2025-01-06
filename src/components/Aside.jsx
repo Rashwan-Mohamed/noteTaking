@@ -5,7 +5,9 @@ import UseWidth from "../UseWidth";
 function Aside({ note, isArchived, handleNoteState, handleTagSelect }) {
   const width = UseWidth();
 
-  const [showSide, setShowSide] = useState(true);
+  const [showSide, setShowSide] = useState(() => {
+    return width < 768 ? true : false;
+  });
   return (
     <>
       <aside className={showSide ? "" : "moveLift"}>

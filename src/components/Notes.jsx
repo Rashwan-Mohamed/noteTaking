@@ -1,6 +1,6 @@
 import React from "react";
 
-function Notes({ data, hnadleSelectNote, handleCreatNewNote }) {
+function Notes({ data, hnadleSelectNote, handleCreatNewNote, setShowNote }) {
   const formatDate = (date) => {
     const fDate = new Date(date);
     return new Intl.DateTimeFormat("en-US", {
@@ -20,7 +20,10 @@ function Notes({ data, hnadleSelectNote, handleCreatNewNote }) {
             const { title, tags, content, lastEdited, isArchived } = note;
             return (
               <li
-                onClick={() => hnadleSelectNote(index)}
+                onClick={() => {
+                  setShowNote(true);
+                  hnadleSelectNote(index);
+                }}
                 key={title}
                 className="clickNote"
               >
