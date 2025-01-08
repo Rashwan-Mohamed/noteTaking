@@ -1,6 +1,6 @@
 import React from "react";
 
-function Notes({ data, hnadleSelectNote, handleCreatNewNote, setShowNote }) {
+function Notes({ data, hnadleSelectNote, handleCreatNewNote, setShowNote,width }) {
   const formatDate = (date) => {
     const fDate = new Date(date);
     return new Intl.DateTimeFormat("en-US", {
@@ -21,7 +21,9 @@ function Notes({ data, hnadleSelectNote, handleCreatNewNote, setShowNote }) {
             return (
               <li
                 onClick={() => {
-                  setShowNote(true);
+                  if (width < 768) {
+                    setShowNote(true);
+                  }
                   hnadleSelectNote(index);
                 }}
                 key={title}

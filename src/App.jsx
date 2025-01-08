@@ -143,13 +143,16 @@ function App() {
 
   return (
     <>
-      {active && <div className="tmpMessage">note {active} successfully!</div>}
       <main
         className={width < 768 && (showNote ? "activeNote" : "notActiveNote")}
       >
+        {active && (
+          <div className="tmpMessage">note {active} successfully!</div>
+        )}
         {width < 768 ? (
           <>
             <Nav
+              showNote={showNote}
               width={width}
               isArchived={isArchived}
               searchQuery={searchQuery}
@@ -173,6 +176,7 @@ function App() {
                   note={note}
                 ></Aside>
                 <Notes
+                  width={width}
                   setShowNote={setShowNote}
                   handleCreatNewNote={handleCreatNewNote}
                   hnadleSelectNote={hnadleSelectNote}

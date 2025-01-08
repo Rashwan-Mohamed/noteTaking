@@ -5,6 +5,7 @@ export default function Nav({
   setSearchQuery,
   searchQuery,
   isArchived,
+  showNote,
 }) {
   return (
     <nav>
@@ -42,7 +43,9 @@ export default function Nav({
           </svg>
         </div>
       )}
-      <h3>{!isArchived ? "All" : "Archived"} Notes</h3>
+      <h3 className={showNote && "AllArchived"}>
+        {!isArchived ? "All" : "Archived"} Notes
+      </h3>
       <div className="rightNav">
         <div className="searck">
           <input
